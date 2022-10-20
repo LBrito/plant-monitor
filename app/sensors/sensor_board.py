@@ -1,6 +1,6 @@
-from sht31 import SHT31
-from soil_sensor import SoilSensor
-from tsl2591 import TSL2591
+from sensors.sht31 import SHT31
+from sensors.soil_sensor import SoilSensor
+from sensors.tsl2591 import TSL2591
 
 class SensorBoard():
     def __init__(self):

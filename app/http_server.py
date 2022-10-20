@@ -1,10 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import sys
 import json
 from datetime import datetime
-
-sys.path.append('../')
-from sensor_board import SensorBoard
+from sensors.sensor_board import SensorBoard
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -20,7 +17,7 @@ class MyServer(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    webServer = HTTPServer(('192.168.1.193', 8000), MyServer)
+    webServer = HTTPServer(('0.0.0.0', 8000), MyServer)
     print("Local server started at port 8000")
     try:
         webServer.serve_forever()

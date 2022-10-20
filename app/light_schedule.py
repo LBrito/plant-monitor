@@ -1,6 +1,6 @@
 import time
 import schedule
-from light import PlantSpectrum
+from devices.light import PlantSpectrum
 from datetime import datetime
 
 light = PlantSpectrum()
@@ -20,10 +20,10 @@ def checkLightSchedule():
         light.switch(isOn = False)
     pass
 
-schedule.every(10).minutes.do(checkLightSchedule)
+schedule.every(15).seconds.do(checkLightSchedule)
 
 checkLightSchedule()
 
 while True:
     schedule.run_pending()
-    time.sleep(60)
+    time.sleep(1)
