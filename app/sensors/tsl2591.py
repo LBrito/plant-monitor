@@ -3,10 +3,6 @@ import adafruit_tsl2591
 from time import sleep
 
 class TSL2591:
-    def __init__(self):
-        self.get_readings()
-
-    @classmethod
     def get_readings(self): 
         i2c = board.I2C()
         sensor = adafruit_tsl2591.TSL2591(i2c)

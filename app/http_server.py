@@ -5,8 +5,7 @@ from sensors.sensor_board import SensorBoard
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        readings = SensorBoard().read_sensors()
-        readings['timestamp'] = datetime.utcnow().isoformat() + 'Z'
+        readings = self.get_sensors()
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
@@ -14,7 +13,15 @@ class MyServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes("<body>", "utf-8"))
         self.wfile.write(bytes("<pre>" + json.dumps(readings, indent=4) + "</pre>", "utf-8"))
         self.wfile.write(bytes("</body></html>", "utf-8"))
-
+    
+    def get_sensors(self):
+        try:
+            readings = SensorBoard().read_sensors()
+            readings['timestamp'] = datetime.utcnow().isoformat() + 'Z'
+            return readings
+        except Exception as e:
+            print("error loading sensors", e)
+            return {"error": str(e)}
 
 if __name__ == "__main__":
     webServer = HTTPServer(('0.0.0.0', 8000), MyServer)
