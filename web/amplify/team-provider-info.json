@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-plantmonitorui-dev-140305-authRole",
+      "UnauthRoleArn": "arn:aws:iam::196416418530:role/amplify-plantmonitorui-dev-140305-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::196416418530:role/amplify-plantmonitorui-dev-140305-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-plantmonitorui-dev-140305-deployment",
+      "UnauthRoleName": "amplify-plantmonitorui-dev-140305-unauthRole",
+      "StackName": "amplify-plantmonitorui-dev-140305",
+      "StackId": "arn:aws:cloudformation:us-east-1:196416418530:stack/amplify-plantmonitorui-dev-140305/c6477060-56ea-11ed-aeec-0e5a1ae84d33",
+      "AmplifyAppId": "d3hdlmv96xfwjj"
+    },
+    "categories": {
+      "auth": {
+        "plantmonitorui5807e2ae": {}
+      }
+    }
+  }
+}
