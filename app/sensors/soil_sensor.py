@@ -5,10 +5,8 @@ from adafruit_seesaw.seesaw import Seesaw
 
 class SoilSensor:
     def __init__(self, address):
-        self.address = address
+        bus = board.I2C()
+        self.sensor = Seesaw(bus, addr=address)
 
     def get_readings(self):
-        bus = board.I2C()
-        ss = Seesaw(bus, addr=self.address)
-    
-        return ss.moisture_read(), ss.get_temp()
+        return self.sensor.moisture_read(), self.sensor.get_temp()

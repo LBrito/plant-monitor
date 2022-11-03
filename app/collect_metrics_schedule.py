@@ -2,8 +2,8 @@ import time
 import schedule
 import random
 import json
-from sensor_board import SensorBoard
-from paho_mqtt import MQTT
+from sensors.sensor_board import SensorBoard
+from iot.paho_mqtt import MQTT
 from datetime import datetime
 
 def readSensors():
@@ -23,8 +23,8 @@ def main():
     pass
 
 
-schedule.every(10).seconds.do(main)
+schedule.every(1).minute.do(main).run()
 
 while True:
     schedule.run_pending()
-    time.sleep(1)
+    time.sleep(30)
