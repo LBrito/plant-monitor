@@ -41,15 +41,14 @@ class Sensors extends React.Component {
             <div className="Sensor">
                 <Card style={{ width: '18rem' }}>
                     <Card.Body>
-                        <Card.Title>{this.props.name}</Card.Title>
+                        <Card.Title>{this.props.title}</Card.Title>
                         <Card.Text>
                             {sensorData} {this.props.unit}
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                <style jsx>{
-                    `
-                .Sensor {
+                <style jsx="true">{
+                    `.Sensor {
                         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
                         transition: 0.3s;
                     }
