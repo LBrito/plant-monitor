@@ -43,7 +43,7 @@ class Sensors extends React.Component {
                     <Card.Body>
                         <Card.Title>{this.props.title}</Card.Title>
                         <Card.Text>
-                            {sensorData} {this.props.unit}
+                            {Math.round((sensorData || 0) * 100) / 100} {this.props.unit}
                         </Card.Text>
                     </Card.Body>
                 </Card>
