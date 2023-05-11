@@ -4,6 +4,8 @@ from datetime import datetime
 from sensors.sensor_board import SensorBoard
 
 class MyServer(BaseHTTPRequestHandler):
+    board = SensorBoard()
+      
     def do_GET(self):
         readings = self.get_sensors()
         self.send_response(200)
@@ -16,7 +18,7 @@ class MyServer(BaseHTTPRequestHandler):
     
     def get_sensors(self):
         try:
-            readings = SensorBoard().read_sensors()
+            readings = self.board.read_sensors()
             readings['timestamp'] = datetime.utcnow().isoformat() + 'Z'
             return readings
         except Exception as e:

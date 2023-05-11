@@ -3,7 +3,6 @@ import schedule
 from devices.light import PlantSpectrum
 from datetime import datetime
 import json
-from pathlib import Path
 
 light = PlantSpectrum()
 
@@ -32,6 +31,9 @@ def checkLightSchedule():
 
 schedule.every(5).minutes.do(checkLightSchedule).run()
 
-while True:
-    schedule.run_pending()
-    time.sleep(30)
+try:  
+    while True:
+        schedule.run_pending()
+        time.sleep(30)
+finally:  
+    light.reset()

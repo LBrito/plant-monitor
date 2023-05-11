@@ -6,14 +6,15 @@ from sensors.sensor_board import SensorBoard
 from iot.paho_mqtt import MQTT
 from datetime import datetime
 
+board = SensorBoard()
+
 def readSensors():
-    readings = SensorBoard().read_sensors()
-    print("Sending message: ", json.dumps(readings, indent=4))
-    
+    readings = board.read_sensors()
     return readings
 
 def sendMessage(message):
     message['timestamp'] = datetime.utcnow().isoformat() + 'Z'
+    print("Sending message @", message['timestamp'])
     MQTT().publishMessage(message)
     pass
     
@@ -22,9 +23,8 @@ def main():
     sendMessage(readings)
     pass
 
-
-schedule.every(1).minute.do(main).run()
+schedule.every(30).seconds.do(main).run()
 
 while True:
     schedule.run_pending()
-    time.sleep(30)
+    time.sleep(10)
