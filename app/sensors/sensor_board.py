@@ -7,6 +7,7 @@ import os
 import subprocess
 import time
 import smbus
+from datetime import datetime
 
 class SensorBoard():
     def __init__(self):
@@ -29,32 +30,60 @@ class SensorBoard():
         for device in range(0x36, 0x40):
             try:
                 bus.write_byte(device, 0)
-                print("Found soil sensor @ {0}".format(hex(device)))
                 sensors.append(SoilSensor(device))
             except:
                 pass
         return sensors
     
     def read_sensors(self):
-        rTemperature, rHumidity = self.ambient_sensor.get_readings()
-        lux, infrared, visible, full_spectrum = self.light_sensor.get_readings()
+        timestamp = datetime.utcnow().isoformat() + 'Z'
         readings = {
-            "relativeHumidity": rHumidity,
-            "relativeTemperature": rTemperature,
-            "lux": lux,
-            "infrared": infrared,
-            "visible": visible,
-            "full_spectrum": full_spectrum
+            "timestamp": timestamp
         }
+        
+        readings = self.setTemperatureHumidityReadings(readings)
+        readings = self.setLightReadings(readings)
+        
+        return self.setSoilSensorReadings(readings)
+    
+    def setTemperatureHumidityReadings(self, readings):
+        try:
+            rTemperature, rHumidity = self.ambient_sensor.get_readings()
+            readings["relativeHumidity"]	= rHumidity
+            readings["relativeTemperature"]	= rTemperature
+        except Exception as e:
+            print("Error reading temperature/humidity: ", e)
+            readings["relativeHumidity"] = {"error": str(e)}
+            pass
+        
+        return readings
+    
+    def setLightReadings(self, readings):
+        try:
+            lux, infrared, visible, full_spectrum = self.light_sensor.get_readings()           
+            readings["lux"]				= lux
+            readings["infrared"]		= infrared
+            readings["visible"]			= visible
+            readings["full_spectrum"]	= full_spectrum
+        except Exception as e:
+            print("Error reading light measurements: ", e)
+            readings["lux"] = {"error": str(e)}
+            pass
+        
+        return readings
+    
+    def setSoilSensorReadings(self, readings):
         for i, sensor in enumerate(self.soil_sensors):
+            sensorKey = "{}{}".format("soil", i)
             try:
                 moisture, temperature = sensor.get_readings()
-                readings["{}{}".format("soil", i)] = {
+                readings[sensorKey] = {
                     "soilTemperature": temperature,
                     "soilMoisture": moisture,
                 }
             except Exception as e:
-                print("Error reading sensor: ", e)
+                print("Error reading soil sensor: ", e)
+                readings[sensorKey] = {"error": str(e)}
                 pass
         
         return readings

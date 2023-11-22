@@ -4,7 +4,6 @@ import random
 import json
 from sensors.sensor_board import SensorBoard
 from iot.paho_mqtt import MQTT
-from datetime import datetime
 
 board = SensorBoard()
 
@@ -13,17 +12,24 @@ def readSensors():
     return readings
 
 def sendMessage(message):
-    message['timestamp'] = datetime.utcnow().isoformat() + 'Z'
     print("Sending message @", message['timestamp'])
     MQTT().publishMessage(message)
+    pass
+
+def writeToFile(readings):
+    readingsJson = json.dumps(readings, indent=4)
+    #print(readingsJson + "\n")
+    with open('/home/pi/.ptm/app/data/readings.json', 'w') as f:
+        f.write(readingsJson)
     pass
     
 def main():
     readings = readSensors()
-    sendMessage(readings)
+    writeToFile(readings)
+    #sendMessage(readings)
     pass
 
-schedule.every(30).seconds.do(main).run()
+schedule.every(60).seconds.do(main).run()
 
 while True:
     schedule.run_pending()

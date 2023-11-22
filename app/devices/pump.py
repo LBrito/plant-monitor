@@ -1,9 +1,9 @@
 import RPi.GPIO as GPIO
 import time
 
-class PlantSpectrum:
+class WaterPump:
     def __init__(self):
-        self.RELAIS_1_GPIO = 27 # GPIO pin 11
+        self.RELAIS_1_GPIO = 22 # GPIO pin 11
         GPIO.setmode(GPIO.BCM) # GPIO Numbers instead of board number
         GPIO.setup(self.RELAIS_1_GPIO, GPIO.OUT) # GPIO Assign mode
 
@@ -16,3 +16,9 @@ class PlantSpectrum:
     
     def reset(self):
         GPIO.cleanup()
+
+pump = WaterPump()
+pump.switch(isOn=False)
+time.sleep(60)
+print("done")
+pump.reset()

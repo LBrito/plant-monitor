@@ -3,11 +3,13 @@ import schedule
 from devices.light import PlantSpectrum
 from datetime import datetime
 import json
+import os
+import RPi.GPIO as GPIO
 
 light = PlantSpectrum()
 
 def getSchedule():
-    f = open('/home/pi/.ptm/app/light_schedule.json')
+    f = open(os.environ["PTM_HOME"] + '/app/light_schedule.json', 'r')
     config = json.load(f)
     start = datetime.strptime(config['start'], "%H:%M")
     end = datetime.strptime(config['end'], "%H:%M")
@@ -35,5 +37,5 @@ try:
     while True:
         schedule.run_pending()
         time.sleep(30)
-finally:  
+finally:
     light.reset()
