@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 
 class RelayDevice:
     def __init__(self, pin):
-        self.RELAY_GPIO_PIN = pin  # GPIO pin 11
+        self.RELAY_GPIO_PIN = pin  # GPIO pin
         GPIO.setmode(GPIO.BCM)  # GPIO Numbers instead of board number
         GPIO.setup(self.RELAY_GPIO_PIN, GPIO.OUT)  # GPIO Assign mode
 

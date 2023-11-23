@@ -174,4 +174,5 @@ cython_debug/
 /certs
 /logs
 /data
+/conf
 .idea
