@@ -29,11 +29,11 @@ def check_light_schedule():
     print("[", datetime.now(), "] Lighting scheduled to start @", start, "and end @", end)
     if start < now < end:
         if not light.is_on():
-            print("Turning light on!")
+            print("[", datetime.now(), "] Turning light on!")
             light.switch(is_on=True)
         return
     if light.is_on():
-        print("Turning light off!")
+        print("[", datetime.now(), "] Turning light off!")
         light.switch(is_on=False)
     pass
 
@@ -46,7 +46,7 @@ def read_watering_schedule_conf():
     scheduled_start = datetime.strptime(config['water_at_time'], "%H:%M")
     water_for = config['water_for_seconds']
     f = open(WATERING_SCHEDULE_LOG, 'r')
-    last_watering_date = datetime.strptime(f.read(), "%Y-%m-%d %H:%M:%S.%f")
+    last_watering_date = datetime.strptime(f.read().strip(), "%Y-%m-%d %H:%M:%S.%f")
     return enabled, days, last_watering_date, scheduled_start, water_for
 
 
@@ -56,31 +56,31 @@ def check_pump_schedule():
     weekday = datetime.now().weekday()
     print("[", now, "] Watering scheduled, today is", now.strftime("%A"), ", last watered @", last_watering)
     if not enabled:
-        print("Skipping, not enabled")
+        print("[", now, "] Skipping, not enabled")
         return
     if last_watering.date() == now.date():
-        print("Skipping, already watered @", scheduled_start.time())
+        print("[", now, "] Skipping, already watered @", scheduled_start.time())
         return
     if weekday not in watering_days:
-        print("Skipping, not today! Scheduled weekdays:",
+        print("[", now, "] Skipping, not today! Scheduled weekdays:",
               [calendar.day_name[int(day)] for day in watering_days])
         return
     if now.time() < scheduled_start.time():
-        print("Skipping, will start after", scheduled_start.time())
+        print("[", now, "] Skipping, will start after", scheduled_start.time())
         return
-    seconds = water_for if weekday == watering_days[-1] else (water_for / 4)
-    print("Watering now for", seconds, "seconds")
+    seconds = water_for if weekday == watering_days[-1] else (water_for / 5)
+    print("[", now, "] Watering now for", seconds, "seconds")
     pump.switch(True)
     time.sleep(seconds)
     pump.switch(False)
     finish_time = datetime.now()
-    print("Finished... Saving log @", finish_time)
+    print("[", now, "] Finished... Saving log @", finish_time)
     with open(WATERING_SCHEDULE_LOG, 'w') as file:
         file.write(str(finish_time))
 
 
 def run_schedules():
-    schedule.every(1).minutes.do(check_light_schedule).run()
+    schedule.every(5).minutes.do(check_light_schedule).run()
     schedule.every(10).minutes.do(check_pump_schedule).run()
 
 
